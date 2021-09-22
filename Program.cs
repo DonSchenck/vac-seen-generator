@@ -41,12 +41,15 @@ namespace vac_seen_generator
                 ve.RecipientID = recipientID.ToString();
                 ve.ShotNumber = shotNumber;
                 ve.VaccinationType =
-                    vTypes.GetValue(vaccinationTypeID).ToString();
+                vTypes.GetValue(vaccinationTypeID).ToString();
                 ve.EventTimestamp = DateTime.Now;
 
                 // Convert object to JSON so it can be sent to Kafka
                 string veJson = JsonConvert.SerializeObject(ve);
 
+                // Write to Console for fun
+                Console.WriteLine(veJson);
+                
                 // Send event to Kafka
                 var conf =
                     new ProducerConfig { BootstrapServers = "localhost:9092" };
