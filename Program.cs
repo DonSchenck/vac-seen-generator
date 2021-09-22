@@ -63,7 +63,7 @@ namespace vac_seen_generator
 
                 using (var p = new ProducerBuilder<Null, string>(conf).Build())
                 {
-                    p.Produce("vaccinations",new Message<Null, string> { Value = veJson },handler);
+                    p.Produce("us",new Message<Null, string> { Value = veJson },handler);
 
                     // wait for up to 10 seconds for any inflight messages to be delivered.
                     p.Flush(TimeSpan.FromSeconds(10));
