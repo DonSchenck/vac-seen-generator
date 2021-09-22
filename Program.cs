@@ -45,7 +45,7 @@ namespace vac_seen_generator
                 ve.EventTimestamp = DateTime.Now;
 
                 // Convert object to JSON so it can be sent to Kafka
-
+                string veJson = JsonConvert.SerializeObject(ve);
 
                 // Send event to Kafka
                 var conf =
@@ -60,7 +60,7 @@ namespace vac_seen_generator
 
                 using (var p = new ProducerBuilder<Null, string>(conf).Build())
                 {
-                    p.Produce("vaccinations",new Message<Null, string> { Value = ve.VaccinationType },handler);
+                    p.Produce("vaccinations",new Message<Null, string> { Value = veJson },handler);
 
                     // wait for up to 10 seconds for any inflight messages to be delivered.
                     p.Flush(TimeSpan.FromSeconds(10));
