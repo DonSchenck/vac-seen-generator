@@ -19,8 +19,8 @@ namespace vac_seen_generator
             // Number of vaccinations is random integer from 1 to 125
             Random rnd = new Random();
 
-            //Create random location code
-            int locationID = rnd.Next(1, 5);
+            // Hard-coded country code: United States
+            string countryCode = "us";
 
             // Create random vaccination count
             int numberOfVaccinations = rnd.Next(1, 126);
