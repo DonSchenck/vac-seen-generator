@@ -6,7 +6,7 @@ namespace vac_seen_generator
     {
         public String RecipientID;
         public DateTime EventTimestamp;
-        public int LocationID;
+        public string CountryCode;
         public String VaccinationType;
         public int ShotNumber;
     }

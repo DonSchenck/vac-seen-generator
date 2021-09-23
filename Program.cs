@@ -40,9 +40,9 @@ namespace vac_seen_generator
                 VaccinationEvent ve = new VaccinationEvent();
                 ve.RecipientID = recipientID.ToString();
                 ve.ShotNumber = shotNumber;
-                ve.VaccinationType =
-                vTypes.GetValue(vaccinationTypeID).ToString();
+                ve.VaccinationType = vTypes.GetValue(vaccinationTypeID).ToString();
                 ve.EventTimestamp = DateTime.Now;
+                ve.CountryCode = countryCode;
 
                 // Convert object to JSON so it can be sent to Kafka
                 string veJson = JsonConvert.SerializeObject(ve);
