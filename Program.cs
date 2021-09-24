@@ -14,6 +14,7 @@ namespace vac_seen_generator
         static void Main(string[] args)
         {
             Console.WriteLine("Starting simulation...");
+            Console.WriteLine(Environment.GetEnvironmentVariable("SERVICE_BINDING_ROOT"));
 
             // Location code is random integer from 1 to 4
             // Number of vaccinations is random integer from 1 to 125
