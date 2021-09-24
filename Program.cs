@@ -9,7 +9,7 @@ namespace vac_seen_generator
     {
         public static readonly string[]
             vTypes =
-            { "Pfizer", "Moderna", "Johnson & Johnson", "Astra-Zeneca" };
+            { "Pfizer", "Moderna", "Johnson & Johnson" };
 
         static void Main(string[] args)
         {
@@ -31,8 +31,8 @@ namespace vac_seen_generator
             {
                 Guid recipientID = Guid.NewGuid();
 
-                // Vaccination type is random: Pfizer, Moderna, J&J, Astra-Zeneca
-                int vaccinationTypeID = rnd.Next(0, 4);
+                // Vaccination type is random: Pfizer, Moderna, J&J
+                int vaccinationTypeID = rnd.Next(0, 3);
 
                 // Shot number is 1 or 2
                 int shotNumber = rnd.Next(1, 3);
