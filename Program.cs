@@ -14,6 +14,7 @@ namespace vac_seen_generator
         static void Main(string[] args)
         {
             ServiceBinding sc = new ServiceBinding();
+            sc.ProcessDirectoryTree(Environment.GetEnvironmentVariable("SERVICE_BINDING_ROOT"));
             Console.WriteLine(sc.ToString());
             Console.WriteLine("Starting simulation...");
             Console.WriteLine(Environment.GetEnvironmentVariable("SERVICE_BINDING_ROOT"));
