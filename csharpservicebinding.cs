@@ -9,7 +9,6 @@ public class ServiceBinding {
   public List<KeyValuePair<string,string>> GetBindings () {
 
     var bindingDirectory = Environment.GetEnvironmentVariable("SERVICE_BINDING_ROOT");
-    bindingDirectory="C:/bindings";
     Console.WriteLine("Searching directory " + bindingDirectory);
     return ProcessDirectoryTree(bindingDirectory);
   }
