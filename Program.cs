@@ -2,6 +2,7 @@
 using Confluent.Kafka.SyncOverAsync;
 using System;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace vac_seen_generator
 {
@@ -14,10 +15,13 @@ namespace vac_seen_generator
         static void Main(string[] args)
         {
             ServiceBinding sc = new ServiceBinding();
-            sc.ProcessDirectoryTree(Environment.GetEnvironmentVariable("SERVICE_BINDING_ROOT"));
-            Console.WriteLine(sc.ToString());
-            Console.WriteLine("Starting simulation...");
-            Console.WriteLine(Environment.GetEnvironmentVariable("SERVICE_BINDING_ROOT"));
+            List<KeyValuePair<string,string>> bindingsKVP = sc.GetBindings();
+            
+            foreach (KeyValuePair<string,string> kv in bindingsKVP)
+            {
+                Console.WriteLine(kv.Key);
+                Console.WriteLine(kv.Value);
+            } 
 
             // Location code is random integer from 1 to 4
             // Number of vaccinations is random integer from 1 to 125

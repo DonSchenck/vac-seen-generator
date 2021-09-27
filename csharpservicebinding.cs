@@ -6,27 +6,26 @@ public class ServiceBinding {
   
   // var tupleList = new List<(string Firstname, string Lastname)>;
 
-  public List<(string key,string value)> Main (string[] args) {
+  public List<KeyValuePair<string,string>> GetBindings () {
 
     var bindingDirectory = Environment.GetEnvironmentVariable("SERVICE_BINDING_ROOT");
+    bindingDirectory="C:/bindings";
+    Console.WriteLine("Searching directory " + bindingDirectory);
     return ProcessDirectoryTree(bindingDirectory);
   }
 
-
-  public static List<(string key,string value)> ProcessDirectoryTree(string directory)
+  public static List<KeyValuePair<string,string>> ProcessDirectoryTree(string directory)
   {
     // Walk down the directory tree and for each file, use the filename
     // as the key and the contents as the value, and add this
     // key-value pair to a list of key-value pairs.
     // At the end, return the list.
 
-    List<(string key,string value)> l = new List<(string key,string value)>();
+    List<KeyValuePair<string,string>> l = new List<KeyValuePair<string,string>>();
 
     foreach (string f in Directory.GetFiles(directory))
     {
-        var r = GetFileContents(Path.GetFileName(f));
-        l.Add(r);
-        Console.WriteLine(r.ToString());
+        l.Add(GetFileContents(f));
     } 
 
     foreach (string d in Directory.GetDirectories(directory))
@@ -35,10 +34,11 @@ public class ServiceBinding {
     }
     return l;
   }
-  private static (string key, string value) GetFileContents(string filename)
+  private static KeyValuePair<string,string> GetFileContents(string filename)
   {
     // Get contents of file
-    string v = System.IO.File.ReadAllText(filename);
-    return (filename, v);
+    string value = System.IO.File.ReadAllText(filename);
+    string key = Path.GetFileName(filename);
+    return new KeyValuePair<string,string>(key,value);
   }
 }
