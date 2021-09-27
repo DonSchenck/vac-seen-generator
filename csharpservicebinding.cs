@@ -26,6 +26,7 @@ public class ServiceBinding {
     {
         var r = GetFileContents(Path.GetFileName(f));
         l.Add(r);
+        Console.WriteLine(r.ToString());
     } 
 
     foreach (string d in Directory.GetDirectories(directory))
