@@ -64,12 +64,13 @@ namespace vac_seen_generator
                 // Send event to Kafka
                 var conf = new ProducerConfig { 
                     BootstrapServers = bindingsKVP["bootstrapservers"], 
-                    SecurityProtocol = SecurityProtocol.SaslSsl,
+                    SecurityProtocol = ToSecurityProtocol(bindingsKVP["securityProtocol"]),
                     SaslMechanism = SaslMechanism.Plain,
                     SaslUsername = bindingsKVP["user"],
                     SaslPassword = bindingsKVP["password"]
                     };
   
+                
                 Action<DeliveryReport<Null, string>> handler =
                     r =>
                         Console
@@ -86,5 +87,14 @@ namespace vac_seen_generator
                 }
             }
         }
+
+    public static SecurityProtocol ToSecurityProtocol(string bindingValue) => bindingValue switch
+    {
+        "SASL_SSL"          => SecurityProtocol.SaslSsl,
+        "PLAIN"             => SecurityProtocol.Plaintext,
+        "SASL_PLAINTEXT"    => SecurityProtocol.SaslPlaintext,
+        "SSL"               => SecurityProtocol.Ssl,
+        _ => throw new ArgumentOutOfRangeException(bindingValue, $"Not expected SecurityProtocol value: {bindingValue}"),
+    };        
     }
 }
