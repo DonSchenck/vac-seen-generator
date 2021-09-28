@@ -4,40 +4,42 @@ using System.Collections.Generic;
 
 public class ServiceBinding {
   
-  // var tupleList = new List<(string Firstname, string Lastname)>;
+  private static Dictionary<string,string> _l;
 
-  public List<KeyValuePair<string,string>> GetBindings () {
-
+  public Dictionary<string,string> GetBindings (string type) {
     var bindingDirectory = Environment.GetEnvironmentVariable("SERVICE_BINDING_ROOT");
     Console.WriteLine("Searching directory " + bindingDirectory);
-    return ProcessDirectoryTree(bindingDirectory);
+    _l = new Dictionary<string,string>();
+    ProcessDirectoryTree(bindingDirectory, type);
+    return _l;
   }
 
-  public static List<KeyValuePair<string,string>> ProcessDirectoryTree(string directory)
+  private static void ProcessDirectoryTree(string directory, string type)
   {
     // Walk down the directory tree and for each file, use the filename
     // as the key and the contents as the value, and add this
     // key-value pair to a list of key-value pairs.
     // At the end, return the list.
 
-    List<KeyValuePair<string,string>> l = new List<KeyValuePair<string,string>>();
-
-    foreach (string f in Directory.GetFiles(directory))
-    {
-        l.Add(GetFileContents(f));
-    } 
+    if (File.Exists(directory + "/type") && System.IO.File.ReadAllText(directory + "/type") == type) {
+      foreach (string f in Directory.GetFiles(directory))
+        {
+          GetFileContents(f);
+        } 
+    }
 
     foreach (string d in Directory.GetDirectories(directory))
     {
-      ProcessDirectoryTree(d);
+      ProcessDirectoryTree(d, type);
     }
-    return l;
   }
-  private static KeyValuePair<string,string> GetFileContents(string filename)
+
+  private static void GetFileContents(string filename)
   {
     // Get contents of file
     string value = System.IO.File.ReadAllText(filename);
     string key = Path.GetFileName(filename);
-    return new KeyValuePair<string,string>(key,value);
+    Dictionary<string,string> d = new Dictionary<string,string>();
+    _l.Add(key, value);
   }
 }

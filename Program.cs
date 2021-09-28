@@ -15,16 +15,18 @@ namespace vac_seen_generator
         static void Main(string[] args)
         {
             ServiceBinding sc = new ServiceBinding();
-            List<KeyValuePair<string,string>> bindingsKVP = sc.GetBindings();
+            Environment.SetEnvironmentVariable("SERVICE_BINDING_ROOT","C:/bindings");
+            Dictionary<string,string> bindingsKVP = sc.GetBindings("kafka");
             
             foreach (KeyValuePair<string,string> kv in bindingsKVP)
             {
-                Console.WriteLine(kv.Key);
-                Console.WriteLine(kv.Value);
+                Console.WriteLine("Key {0} has value {1}",kv.Key,kv.Value);
             } 
 
             // Location code is random integer from 1 to 4
             // Number of vaccinations is random integer from 1 to 125
+            Console.WriteLine(bindingsKVP["password"]);
+            
             Random rnd = new Random();
 
             // Hard-coded country code: United States
