@@ -3,6 +3,7 @@ using Confluent.Kafka.SyncOverAsync;
 using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using KubeServiceBinding;
 
 namespace vac_seen_generator
 {
@@ -14,7 +15,7 @@ namespace vac_seen_generator
 
         static void Main(string[] args)
         {
-            ServiceBinding sc = new ServiceBinding();
+            DotnetServiceBinding sc = new DotnetServiceBinding();
             Dictionary<string,string> bindingsKVP = sc.GetBindings("kafka");
             
             // At this point, we have the information needed to bind to our Kafka
