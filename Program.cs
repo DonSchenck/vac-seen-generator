@@ -25,12 +25,7 @@ namespace vac_seen_generator
 
         static void Main(string[] args)
         {
-            DotnetServiceBinding sc = new DotnetServiceBinding();
-            Dictionary<string,string> bindingsKVP = sc.GetBindings("kafka");
-            // At this point, we have the information needed to bind to our Kafka
-            // bootstrap server.
-
-
+            Dictionary<string,string> bindingsKVP = GetDotnetServiceBindings();
 
             // Number of vaccinations is random integer from 1 to MaxVaccines            
             Random rnd = new Random();
@@ -85,6 +80,23 @@ namespace vac_seen_generator
                     p.Flush(TimeSpan.FromSeconds(10));
                 }
             }
+        }
+        private static Dictionary<string,string> GetDotnetServiceBindings() {    
+            int count = 0;
+            int maxTries = 999;
+            while(true) {
+                try {
+                    DotnetServiceBinding sc = new DotnetServiceBinding();
+                    Dictionary<string,string> d = sc.GetBindings("kafka");
+                    return d;
+                    // At this point, we have the information needed to bind to our Kafka
+                    // bootstrap server.
+                } catch (Exception e) {
+                    // handle exception
+                    System.Threading.Thread.Sleep(1000);
+                    if (++count == maxTries) throw e;
+                }
+            }   
         }
 
     public static SecurityProtocol ToSecurityProtocol(string bindingValue) => bindingValue switch
