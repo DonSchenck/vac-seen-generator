@@ -15,7 +15,6 @@ namespace vac_seen_generator
         static void Main(string[] args)
         {
             ServiceBinding sc = new ServiceBinding();
-            Environment.SetEnvironmentVariable("SERVICE_BINDING_ROOT","C:/bindings");
             Dictionary<string,string> bindingsKVP = sc.GetBindings("kafka");
             
             foreach (KeyValuePair<string,string> kv in bindingsKVP)
@@ -23,10 +22,12 @@ namespace vac_seen_generator
                 Console.WriteLine("Key {0} has value {1}",kv.Key,kv.Value);
             } 
 
-            // Location code is random integer from 1 to 4
-            // Number of vaccinations is random integer from 1 to 125
-            Console.WriteLine(bindingsKVP["password"]);
+            // At this point, we have the information needed to bind to our Kafka
+            // bootstrap server.
             
+
+            // Location code is random integer from 1 to 4
+            // Number of vaccinations is random integer from 1 to 125            
             Random rnd = new Random();
 
             // Hard-coded country code: United States
@@ -61,9 +62,15 @@ namespace vac_seen_generator
                 Console.WriteLine(veJson);
                 
                 // Send event to Kafka
-                var conf =
-                    new ProducerConfig { BootstrapServers = "localhost:9092" };
-
+                var conf = new ProducerConfig { 
+                    BootstrapServers = bindingsKVP["bootstrapserver"], 
+                    SslCaLocation = "/Path-to/cluster-ca-certificate.pem",
+                    SecurityProtocol = SecurityProtocol.SaslSsl,
+                    SaslMechanism = SaslMechanism.ScramSha256,
+                    SaslUsername = bindingsKVP["user"],
+                    SaslPassword = bindingsKVP["password"]
+                    };
+  
                 Action<DeliveryReport<Null, string>> handler =
                     r =>
                         Console
