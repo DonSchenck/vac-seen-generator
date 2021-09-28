@@ -39,7 +39,6 @@ public class ServiceBinding {
     // Get contents of file
     string value = System.IO.File.ReadAllText(filename);
     string key = Path.GetFileName(filename);
-    Console.WriteLine("+++adding KEY {0} with VALUE {1}",key,value);
     Dictionary<string,string> d = new Dictionary<string,string>();
     if (_l.ContainsKey(key)) {
       _l["key"] = value;

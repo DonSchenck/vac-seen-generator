@@ -17,11 +17,6 @@ namespace vac_seen_generator
             ServiceBinding sc = new ServiceBinding();
             Dictionary<string,string> bindingsKVP = sc.GetBindings("kafka");
             
-            foreach (KeyValuePair<string,string> kv in bindingsKVP)
-            {
-                Console.WriteLine("Key {0} has value {1}",kv.Key,kv.Value);
-            } 
-
             // At this point, we have the information needed to bind to our Kafka
             // bootstrap server.
             
@@ -95,6 +90,14 @@ namespace vac_seen_generator
         "SASL_PLAINTEXT"    => SecurityProtocol.SaslPlaintext,
         "SSL"               => SecurityProtocol.Ssl,
         _ => throw new ArgumentOutOfRangeException(bindingValue, $"Not expected SecurityProtocol value: {bindingValue}"),
+    };        
+    public static SaslMechanism ToSaslMechanism(string bindingValue) => bindingValue switch
+    {
+        "GSSAPI"        => SaslMechanism.Gssapi,
+        "PLAIN"         => SaslMechanism.Plain,
+        "SCRAM-SHA-256" => SaslMechanism.ScramSha256,
+        "SCRAM-SHA-512" => SaslMechanism.ScramSha512,
+        _ => throw new ArgumentOutOfRangeException(bindingValue, $"Not expected SaslMechanism value: {bindingValue}"),
     };        
     }
 }
