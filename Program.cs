@@ -63,10 +63,10 @@ namespace vac_seen_generator
                 
                 // Send event to Kafka
                 var conf = new ProducerConfig { 
-                    BootstrapServers = bindingsKVP["bootstrapserver"], 
+                    BootstrapServers = bindingsKVP["bootstrapservers"], 
                     SslCaLocation = "/Path-to/cluster-ca-certificate.pem",
-                    SecurityProtocol = SecurityProtocol.SaslSsl,
-                    SaslMechanism = SaslMechanism.ScramSha256,
+                    SecurityProtocol = bindingsKVP["securityProtocol"],
+                    SaslMechanism = bindingsKVP["saslmechanism"],
                     SaslUsername = bindingsKVP["user"],
                     SaslPassword = bindingsKVP["password"]
                     };
