@@ -40,6 +40,11 @@ public class ServiceBinding {
     string value = System.IO.File.ReadAllText(filename);
     string key = Path.GetFileName(filename);
     Dictionary<string,string> d = new Dictionary<string,string>();
-    _l.Add(key, value);
+    if (myDictionary.ContainsKey(key)) {
+      myDictionary["key"] = value;
+    } else
+    {
+      _l.Add(key, value);
+    }
   }
 }
