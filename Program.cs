@@ -9,28 +9,32 @@ namespace vac_seen_generator
 {
     class Program
     {
-        public static readonly string[]
-            vTypes =
-            { "Pfizer", "Moderna", "Johnson & Johnson" };
+        // Location code is hard-coded on purpose: This is the
+        // microservice that reports vaccinations for The United States.
+        // Each country has its own microservice.
+        private const string CountryCode = "US";
+
+        // List of vaccine types available in this location
+        public static readonly string[] vTypes = { "Pfizer", "Moderna", "Johnson & Johnson" };
+
+        // Maximum number of vaccinations to be simulated at one time
+        private const int MaxVaccines = 125;
+
+        // Kafka topic written to. This is typically the country code in lower case.
+        private const string KafkaTopic = "us";
 
         static void Main(string[] args)
         {
             DotnetServiceBinding sc = new DotnetServiceBinding();
             Dictionary<string,string> bindingsKVP = sc.GetBindings("kafka");
-            
             // At this point, we have the information needed to bind to our Kafka
             // bootstrap server.
-            
 
-            // Location code is random integer from 1 to 4
-            // Number of vaccinations is random integer from 1 to 125            
+
+
+            // Number of vaccinations is random integer from 1 to MaxVaccines            
             Random rnd = new Random();
-
-            // Hard-coded country code: United States
-            string countryCode = "us";
-
-            // Create random vaccination count
-            int numberOfVaccinations = rnd.Next(1, 126);
+            int numberOfVaccinations = rnd.Next(1, MaxVaccines+1);
 
             // Create a unique recipientID (a GUID) for each recipient
             // and send the data over to Kafka
@@ -38,8 +42,8 @@ namespace vac_seen_generator
             {
                 Guid recipientID = Guid.NewGuid();
 
-                // Vaccination type is random: Pfizer, Moderna, J&J
-                int vaccinationTypeID = rnd.Next(0, 3);
+                // Vaccination type is random
+                int vaccinationTypeID = rnd.Next(0, vTypes.Length);
 
                 // Shot number is 1 or 2
                 int shotNumber = rnd.Next(1, 3);
@@ -49,7 +53,7 @@ namespace vac_seen_generator
                 ve.ShotNumber = shotNumber;
                 ve.VaccinationType = vTypes.GetValue(vaccinationTypeID).ToString();
                 ve.EventTimestamp = DateTime.Now;
-                ve.CountryCode = countryCode;
+                ve.CountryCode = CountryCode;
 
                 // Convert object to JSON so it can be sent to Kafka
                 string veJson = JsonConvert.SerializeObject(ve);
@@ -65,8 +69,7 @@ namespace vac_seen_generator
                     SaslUsername = bindingsKVP["user"],
                     SaslPassword = bindingsKVP["password"]
                     };
-  
-                
+                  
                 Action<DeliveryReport<Null, string>> handler =
                     r =>
                         Console
@@ -76,7 +79,7 @@ namespace vac_seen_generator
 
                 using (var p = new ProducerBuilder<Null, string>(conf).Build())
                 {
-                    p.Produce("us",new Message<Null, string> { Value = veJson },handler);
+                    p.Produce(KafkaTopic,new Message<Null, string> { Value = veJson },handler);
 
                     // wait for up to 10 seconds for any inflight messages to be delivered.
                     p.Flush(TimeSpan.FromSeconds(10));

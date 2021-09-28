@@ -2,7 +2,7 @@ using System;
 
 namespace vac_seen_generator
 {
-    class VaccinationEvent
+   class VaccinationEvent
     {
         public String RecipientID;
         public DateTime EventTimestamp;
