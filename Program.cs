@@ -27,57 +27,59 @@ namespace vac_seen_generator
         {
             Dictionary<string,string> bindingsKVP = GetDotnetServiceBindings();
 
-            // Number of vaccinations is random integer from 1 to MaxVaccines            
-            Random rnd = new Random();
-            int numberOfVaccinations = rnd.Next(1, MaxVaccines+1);
+            for (int loopcount = 0; loopcount < 100; loopcount++) {
+                // Number of vaccinations is random integer from 1 to MaxVaccines            
+                Random rnd = new Random();
+                int numberOfVaccinations = rnd.Next(1, MaxVaccines+1);
 
-            // Create a unique recipientID (a GUID) for each recipient
-            // and send the data over to Kafka
-            for (int i = 0; i < numberOfVaccinations - 1; i++)
-            {
-                Guid recipientID = Guid.NewGuid();
-
-                // Vaccination type is random
-                int vaccinationTypeID = rnd.Next(0, vTypes.Length);
-
-                // Shot number is 1 or 2
-                int shotNumber = rnd.Next(1, 3);
-
-                VaccinationEvent ve = new VaccinationEvent();
-                ve.RecipientID = recipientID.ToString();
-                ve.ShotNumber = shotNumber;
-                ve.VaccinationType = vTypes.GetValue(vaccinationTypeID).ToString();
-                ve.EventTimestamp = DateTime.Now;
-                ve.CountryCode = CountryCode;
-
-                // Convert object to JSON so it can be sent to Kafka
-                string veJson = JsonConvert.SerializeObject(ve);
-
-                // Write to Console for fun
-                Console.WriteLine(veJson);
-                
-                // Send event to Kafka
-                var conf = new ProducerConfig { 
-                    BootstrapServers = bindingsKVP["bootstrapservers"], 
-                    SecurityProtocol = ToSecurityProtocol(bindingsKVP["securityProtocol"]),
-                    SaslMechanism = SaslMechanism.Plain,
-                    SaslUsername = bindingsKVP["user"],
-                    SaslPassword = bindingsKVP["password"]
-                    };
-                  
-                Action<DeliveryReport<Null, string>> handler =
-                    r =>
-                        Console
-                            .WriteLine(!r.Error.IsError
-                                ? $"Delivered message to {r.TopicPartitionOffset}"
-                                : $"Delivery Error: {r.Error.Reason}");
-
-                using (var p = new ProducerBuilder<Null, string>(conf).Build())
+                // Create a unique recipientID (a GUID) for each recipient
+                // and send the data over to Kafka
+                for (int i = 0; i < numberOfVaccinations - 1; i++)
                 {
-                    p.Produce(KafkaTopic,new Message<Null, string> { Value = veJson },handler);
+                    Guid recipientID = Guid.NewGuid();
 
-                    // wait for up to 10 seconds for any inflight messages to be delivered.
-                    p.Flush(TimeSpan.FromSeconds(10));
+                    // Vaccination type is random
+                    int vaccinationTypeID = rnd.Next(0, vTypes.Length);
+
+                    // Shot number is 1 or 2
+                    int shotNumber = rnd.Next(1, 3);
+
+                    VaccinationEvent ve = new VaccinationEvent();
+                    ve.RecipientID = recipientID.ToString();
+                    ve.ShotNumber = shotNumber;
+                    ve.VaccinationType = vTypes.GetValue(vaccinationTypeID).ToString();
+                    ve.EventTimestamp = DateTime.Now;
+                    ve.CountryCode = CountryCode;
+
+                    // Convert object to JSON so it can be sent to Kafka
+                    string veJson = JsonConvert.SerializeObject(ve);
+
+                    // Write to Console for fun
+                    Console.WriteLine(veJson);
+                    
+                    // Send event to Kafka
+                    var conf = new ProducerConfig { 
+                        BootstrapServers = bindingsKVP["bootstrapservers"], 
+                        SecurityProtocol = ToSecurityProtocol(bindingsKVP["securityProtocol"]),
+                        SaslMechanism = SaslMechanism.Plain,
+                        SaslUsername = bindingsKVP["user"],
+                        SaslPassword = bindingsKVP["password"]
+                        };
+                    
+                    Action<DeliveryReport<Null, string>> handler =
+                        r =>
+                            Console
+                                .WriteLine(!r.Error.IsError
+                                    ? $"Delivered message to {r.TopicPartitionOffset}"
+                                    : $"Delivery Error: {r.Error.Reason}");
+
+                    using (var p = new ProducerBuilder<Null, string>(conf).Build())
+                    {
+                        p.Produce(KafkaTopic,new Message<Null, string> { Value = veJson },handler);
+
+                        // wait for up to 10 seconds for any inflight messages to be delivered.
+                        p.Flush(TimeSpan.FromSeconds(10));
+                    }
                 }
             }
         }
