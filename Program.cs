@@ -18,7 +18,7 @@ namespace vac_seen_generator
         public static readonly string[] vTypes = { "Pfizer", "Moderna", "Johnson & Johnson" };
 
         // Maximum number of vaccinations to be simulated at one time
-        private const int MaxVaccines = 125;
+        private const int MaxVaccines = 40;
 
         // Kafka topic written to. This is typically the country code in lower case.
         private const string KafkaTopic = "us";

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "vac-seen-generator": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
