@@ -29,6 +29,12 @@ namespace vac_seen_generator
             // in order to connect to Kafka
             Dictionary<string,string> bindingsKVP = GetDotnetServiceBindings();
 
+            // Write to Console just to make sure
+            Console.WriteLine("bootstrapservers value is {0}", bindingsKVP["bootstrapServers"]);
+            Console.WriteLine("securityProtocol value is {0}", bindingsKVP["securityProtocol"]);
+            Console.WriteLine("saslMechanism    value is {0}", bindingsKVP["saslMechanism"]);
+            Console.WriteLine("user             value is {0}", bindingsKVP["user"]);
+
             // Generate data for past 30 days
             for (int daysago = 0; daysago < 31; daysago++) {
 
@@ -67,7 +73,7 @@ namespace vac_seen_generator
                     var conf = new ProducerConfig { 
                         BootstrapServers = bindingsKVP["bootstrapservers"], 
                         SecurityProtocol = ToSecurityProtocol(bindingsKVP["securityProtocol"]),
-                        SaslMechanism    = SaslMechanism.Plain,
+                        SaslMechanism    = ToSaslMechanism(bindingsKVP["saslMechanism"]),
                         SaslUsername     = bindingsKVP["user"],
                         SaslPassword     = bindingsKVP["password"]
                         };
