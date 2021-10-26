@@ -25,9 +25,15 @@ namespace vac_seen_generator
 
         static void Main(string[] args)
         {
+            // Get service binding information, i.e. the stuff we need
+            // in order to connect to Kafka
             Dictionary<string,string> bindingsKVP = GetDotnetServiceBindings();
 
-            for (int loopcount = 0; loopcount < 100; loopcount++) {
+            // Generate data for past 30 days
+            for (int daysago = 0; daysago < 31; daysago++) {
+
+                DateTime ts = DateTime.Now.AddDays(daysago * -1);
+
                 // Number of vaccinations is random integer from 1 to MaxVaccines            
                 Random rnd = new Random();
                 int numberOfVaccinations = rnd.Next(1, MaxVaccines+1);
@@ -45,11 +51,11 @@ namespace vac_seen_generator
                     int shotNumber = rnd.Next(1, 3);
 
                     VaccinationEvent ve = new VaccinationEvent();
-                    ve.RecipientID = recipientID.ToString();
-                    ve.ShotNumber = shotNumber;
-                    ve.VaccinationType = vTypes.GetValue(vaccinationTypeID).ToString();
-                    ve.EventTimestamp = DateTime.Now;
-                    ve.CountryCode = CountryCode;
+                    ve.RecipientID      = recipientID.ToString();
+                    ve.ShotNumber       = shotNumber;
+                    ve.VaccinationType  = vTypes.GetValue(vaccinationTypeID).ToString();
+                    ve.EventTimestamp   = ts;
+                    ve.CountryCode      = CountryCode;
 
                     // Convert object to JSON so it can be sent to Kafka
                     string veJson = JsonConvert.SerializeObject(ve);
@@ -61,9 +67,9 @@ namespace vac_seen_generator
                     var conf = new ProducerConfig { 
                         BootstrapServers = bindingsKVP["bootstrapservers"], 
                         SecurityProtocol = ToSecurityProtocol(bindingsKVP["securityProtocol"]),
-                        SaslMechanism = SaslMechanism.Plain,
-                        SaslUsername = bindingsKVP["user"],
-                        SaslPassword = bindingsKVP["password"]
+                        SaslMechanism    = SaslMechanism.Plain,
+                        SaslUsername     = bindingsKVP["user"],
+                        SaslPassword     = bindingsKVP["password"]
                         };
                     
                     Action<DeliveryReport<Null, string>> handler =
@@ -77,11 +83,12 @@ namespace vac_seen_generator
                     {
                         p.Produce(KafkaTopic,new Message<Null, string> { Value = veJson },handler);
 
-                        // wait for up to 10 seconds for any inflight messages to be delivered.
-                        p.Flush(TimeSpan.FromSeconds(10));
+                        // wait for up to 3 seconds for any inflight messages to be delivered.
+                        p.Flush(TimeSpan.FromSeconds(3));
                     }
                 }
             }
+
         }
         private static Dictionary<string,string> GetDotnetServiceBindings() {    
             int count = 0;
