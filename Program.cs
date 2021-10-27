@@ -75,6 +75,9 @@ namespace vac_seen_generator
                     conf.SecurityProtocol = SecurityProtocol.SaslSsl;
                     conf.SaslMechanism = SaslMechanism.Plain;
 
+                    conf.SaslUsername = "srvc-acct-6dee83bd-ea49-456d-a5d7-8462732148c3";
+                    conf.SaslPassword = "b50c0593-ff7e-4a99-90bc-344f3d5147fe";
+
                     // Write to Console just to make sure
                     Console.WriteLine("bootstrapservers value is {0}", conf.BootstrapServers);
                     Console.WriteLine("securityProtocol value is {0}", conf.SecurityProtocol.ToString());
