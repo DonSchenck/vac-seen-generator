@@ -34,6 +34,7 @@ namespace vac_seen_generator
             Console.WriteLine("securityProtocol value is {0}", bindingsKVP["securityProtocol"]);
             Console.WriteLine("saslMechanism    value is {0}", bindingsKVP["saslMechanism"]);
             Console.WriteLine("user             value is {0}", bindingsKVP["user"]);
+            Console.WriteLine("password         value is {0}", bindingsKVP["password"]);
 
             // Generate data for past 30 days
             for (int daysago = 0; daysago < 31; daysago++) {
@@ -71,12 +72,12 @@ namespace vac_seen_generator
                     
                     // Send event to Kafka
                     var conf = new ProducerConfig { 
-                        BootstrapServers = bindingsKVP["bootstrapservers"], 
+                        BootstrapServers = bindingsKVP["bootstrapservers"],
                         SecurityProtocol = ToSecurityProtocol(bindingsKVP["securityProtocol"]),
-                        SaslMechanism    = ToSaslMechanism(bindingsKVP["saslMechanism"]),
-                        SaslUsername     = bindingsKVP["user"],
-                        SaslPassword     = bindingsKVP["password"],
-                        ClientId         = bindingsKVP["clientId"],
+                        SaslMechanism = ToSaslMechanism(bindingsKVP["saslMechanism"]),
+                        SaslUsername = bindingsKVP["user"],
+                        SaslPassword = bindingsKVP["password"],
+                        ClientId = bindingsKVP["clientId"]
                         };
                     
                     Action<DeliveryReport<Null, string>> handler =
