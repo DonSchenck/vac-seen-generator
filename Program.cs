@@ -64,24 +64,21 @@ namespace vac_seen_generator
                     Console.WriteLine(veJson);
 
                     // Send event to Kafka
-                    ProducerConfig conf = new ProducerConfig();
+                    ProducerConfig conf = new ProducerConfig{
+                        BootstrapServers = bindingsKVP["bootstrapservers"],
+                        SecurityProtocol = ToSecurityProtocol(bindingsKVP["securityProtocol"]),
+                        SaslMechanism = ToSaslMechanism(bindingsKVP["saslMechanism"]),
+                        SaslUsername = bindingsKVP["user"],
+                        SaslPassword = bindingsKVP["clientSecret"],
+                    };
 
-                    conf.BootstrapServers = bindingsKVP["bootstrapservers"];
-                    conf.SecurityProtocol = ToSecurityProtocol(bindingsKVP["securityProtocol"]);
-                    conf.SaslMechanism = ToSaslMechanism(bindingsKVP["saslMechanism"]);
-                    conf.SaslUsername = bindingsKVP["user"];
-                    conf.SaslPassword = bindingsKVP["clientSecret"];
-                    conf.ClientId = bindingsKVP["clientId"];
-                    conf.SecurityProtocol = SecurityProtocol.SaslSsl;
-                    conf.SaslMechanism = SaslMechanism.Plain;
-
-                    // Write to Console just to make sure
-                    Console.WriteLine("bootstrapservers value is {0}", conf.BootstrapServers);
-                    Console.WriteLine("securityProtocol value is {0}", conf.SecurityProtocol.ToString());
-                    Console.WriteLine("saslMechanism    value is {0}", conf.SaslMechanism.ToString());
-                    Console.WriteLine("user             value is {0}", conf.SaslUsername);
-                    Console.WriteLine("secret           value is {0}", conf.SaslPassword);
-                    Console.WriteLine("clientId         value is {0}", conf.ClientId);
+                    // DEBUGGING: Write to Console just to make sure values are correct
+                    // Console.WriteLine("bootstrapservers value is {0}", conf.BootstrapServers);
+                    // Console.WriteLine("securityProtocol value is {0}", conf.SecurityProtocol.ToString());
+                    // Console.WriteLine("saslMechanism    value is {0}", conf.SaslMechanism.ToString());
+                    // Console.WriteLine("user             value is {0}", conf.SaslUsername);
+                    // Console.WriteLine("secret           value is {0}", conf.SaslPassword);
+                    // Console.WriteLine("clientId         value is {0}", conf.ClientId);
 
                     Action<DeliveryReport<Null, string>> handler =
                         r =>
