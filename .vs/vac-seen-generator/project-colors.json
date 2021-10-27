@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "2f433075-f8eb-400b-bbae-cc578dbd80fa": {
+      "ProjectGuid": "2f433075-f8eb-400b-bbae-cc578dbd80fa",
+      "DisplayName": "vac-seen-generator",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

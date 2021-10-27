@@ -75,7 +75,8 @@ namespace vac_seen_generator
                         SecurityProtocol = ToSecurityProtocol(bindingsKVP["securityProtocol"]),
                         SaslMechanism    = ToSaslMechanism(bindingsKVP["saslMechanism"]),
                         SaslUsername     = bindingsKVP["user"],
-                        SaslPassword     = bindingsKVP["password"]
+                        SaslPassword     = bindingsKVP["password"],
+                        ClientId         = bindingsKVP["clientId"],
                         };
                     
                     Action<DeliveryReport<Null, string>> handler =
