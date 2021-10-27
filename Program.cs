@@ -29,14 +29,6 @@ namespace vac_seen_generator
             // in order to connect to Kafka
             Dictionary<string,string> bindingsKVP = GetDotnetServiceBindings();
 
-            // Write to Console just to make sure
-            Console.WriteLine("bootstrapservers value is {0}", bindingsKVP["bootstrapServers"]);
-            Console.WriteLine("securityProtocol value is {0}", bindingsKVP["securityProtocol"]);
-            Console.WriteLine("saslMechanism    value is {0}", bindingsKVP["saslMechanism"]);
-            Console.WriteLine("user             value is {0}", bindingsKVP["user"]);
-            Console.WriteLine("secret           value is {0}", bindingsKVP["clientSecret"]);
-            Console.WriteLine("clientId         value is {0}", bindingsKVP["clientId"]);
-
             // Generate data for past 30 days
             for (int daysago = 0; daysago < 31; daysago++) {
 
@@ -72,15 +64,23 @@ namespace vac_seen_generator
                     Console.WriteLine(veJson);
 
                     // Send event to Kafka
-                    ProducerConfig conf = new ProducerConfig { 
-                        BootstrapServers = bindingsKVP["bootstrapservers"],
-                        SecurityProtocol = ToSecurityProtocol(bindingsKVP["securityProtocol"]),
-                        SaslMechanism = ToSaslMechanism(bindingsKVP["saslMechanism"]),
-                        SaslUsername = bindingsKVP["user"],
-                        SaslPassword = bindingsKVP["clientSecret"],
-                        ClientId = bindingsKVP["clientId"],
-                        };
-                    
+                    ProducerConfig conf = new ProducerConfig();
+
+                    conf.BootstrapServers = bindingsKVP["bootstrapservers"];
+                    conf.SecurityProtocol = ToSecurityProtocol(bindingsKVP["securityProtocol"]);
+                    conf.SaslMechanism = ToSaslMechanism(bindingsKVP["saslMechanism"]);
+                    conf.SaslUsername = bindingsKVP["user"];
+                    conf.SaslPassword = bindingsKVP["clientSecret"];
+                    conf.ClientId = bindingsKVP["clientId"];
+
+                    // Write to Console just to make sure
+                    Console.WriteLine("bootstrapservers value is {0}", conf.BootstrapServers);
+                    Console.WriteLine("securityProtocol value is {0}", conf.SecurityProtocol.ToString());
+                    Console.WriteLine("saslMechanism    value is {0}", conf.SaslMechanism.ToString());
+                    Console.WriteLine("user             value is {0}", conf.SaslUsername);
+                    Console.WriteLine("secret           value is {0}", conf.SaslPassword);
+                    Console.WriteLine("clientId         value is {0}", conf.ClientId);
+
                     Action<DeliveryReport<Null, string>> handler =
                         r =>
                             Console
