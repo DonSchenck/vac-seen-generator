@@ -72,6 +72,8 @@ namespace vac_seen_generator
                     conf.SaslUsername = bindingsKVP["user"];
                     conf.SaslPassword = bindingsKVP["clientSecret"];
                     conf.ClientId = bindingsKVP["clientId"];
+                    conf.SecurityProtocol = SecurityProtocol.SaslSsl;
+                    conf.SaslMechanism = SaslMechanism.Plain;
 
                     // Write to Console just to make sure
                     Console.WriteLine("bootstrapservers value is {0}", conf.BootstrapServers);
