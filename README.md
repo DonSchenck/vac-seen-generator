@@ -1,17 +1,17 @@
 # vac-seen-generator
 
-This is part of a ficticious demonstration that includes C# code, Apache Kafka, and [Red Hat OpenShift Streams for Apache Kafka](https://www.redhat.com/en/technologies/cloud-computing/openshift/openshift-streams-for-apache-kafka).
+This source code, and [the associated tutorial](https://red.ht/csvax), are part of a ficticious demonstration that includes C# source code and [Red Hat OpenShift Streams for Apache Kafka](https://www.redhat.com/en/technologies/cloud-computing/openshift/openshift-streams-for-apache-kafka).
 
-This tutorial is structured so that a .NET developer can perform this workshop using free resources: the aformentioned Kafka cluster and [Developer Sandbox for Red Hat OpenShift](https://developers.redhat.com/developer-sandbox). A few open source prerequesites are required.
+This tutorial is structured so that a .NET developer can perform this workshop using free resources: the aformentioned Kafka cluster and [Developer Sandbox for Red Hat OpenShift](https://developers.redhat.com/developer-sandbox). In addition, a few open source prerequesites are required.
 
-The scenario is this: Field personnel report the issueance of COVID-19 vaccinations. These events are sent to a Kafka cluster.
+The scenario is this: Field personnel report the administration of COVID-19 vaccinations. These vaccination events are sent to a Kafka cluster.
 
-The particular repo references a microservice called "vac-seen-generator". It creates simulated vaccination events, which contain the following data:
-RecipientID string that identifies who got the shot. It's a GUID.
-EventTimestamp date and time
-CountryCode the hard-coded, two-character ISO code for the country. Currently "us".
-VaccinationType string that denotes which vaccination, for example, Pfizer or Moderna.
-ShotNumber an integer indicating which shot this is for this recipient, i.e. first, second, third, etc.
+The particular repo references a microservice called "vac-seen-generator". It creates simulated vaccination events, which contain the following data:  
+* RecipientID string that identifies who got the shot. It's a GUID.
+* EventTimestamp date and time
+* CountryCode the hard-coded, two-character ISO code for the country. Currently "us".
+* VaccinationType string that denotes which vaccination, for example, Pfizer or Moderna.
+* ShotNumber an integer indicating which shot this is for this recipient, i.e. first, second, third, etc.
 
 ## Using this microservice  
 This microservice is started by an OpenShift job. It can be started multiple times; it uses the current date and time as the EventTimestamp property. Running it over and over simply adds more events to the Kafka event stream.
@@ -23,6 +23,8 @@ The user:
 1. Binds their managed Kafka cluster to the app.
 1. Enjoys the magic.
 
+## The result
+The result of this tutorial is a Kafka topic loaded with vaccination events. A follow-on tutorial will, in turn, use that data.  
 
 ## About that CountryCode  
 Why is CountryCode hard-coded?
