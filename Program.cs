@@ -111,6 +111,7 @@ namespace vac_seen_generator
                     // bootstrap server.
                 } catch (Exception e) {
                     // handle exception
+                    Console.WriteLine("Waiting for service binding...");
                     System.Threading.Thread.Sleep(1000);
                     if (++count == maxTries) throw e;
                 }
