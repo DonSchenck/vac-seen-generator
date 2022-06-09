@@ -29,8 +29,9 @@ namespace vac_seen_generator
             // in order to connect to Kafka
             Dictionary<string,string> bindingsKVP = GetDotnetServiceBindings();
 
-            // Generate data for past 30 days
-            for (int daysago = 0; daysago < 31; daysago++) {
+            // Generate data for past n days
+            int n = 3;
+            for (int daysago = 0; daysago < n; daysago++) {
 
                 DateTime ts = DateTime.Now.AddDays(daysago * -1);
 
