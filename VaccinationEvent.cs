@@ -1,13 +1,13 @@
-using System;
+﻿using System;
 
 namespace vac_seen_generator
 {
-   class VaccinationEvent
+    class VaccinationEvent
     {
-        public String RecipientID;
+        public String? RecipientID;
         public DateTime EventTimestamp;
-        public string CountryCode;
-        public String VaccinationType;
+        public string? CountryCode;
+        public String? VaccinationType;
         public int ShotNumber;
     }
 }
