@@ -104,7 +104,7 @@ public class GeneratorController : ControllerBase
             }
 
         // Return count
-        return numberOfVaccinations;
+        return numberOfVaccinations - 1;
     }
     private static Dictionary<string, string> GetDotnetServiceBindings()
     {
