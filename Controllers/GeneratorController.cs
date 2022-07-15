@@ -32,7 +32,7 @@ public class GeneratorController : ControllerBase
     public async Task<ActionResult<int>> GenerateVaccinationEvents([FromForm]string generation_date)
     {
         Console.WriteLine("REQUEST RECEIVED");
-        DateTime eventDate = DateTime.ParseExact(generation_date, 
+        DateTimeOffset eventDate = DateTime.ParseExact(generation_date, 
                                   "yyyyMMdd", 
                                    CultureInfo.InvariantCulture);
 
