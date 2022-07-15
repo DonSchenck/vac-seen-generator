@@ -31,7 +31,8 @@ public class GeneratorController : ControllerBase
     public async Task<ActionResult<int>> GenerateVaccinationEvents([FromForm]DateTime generation_date)
     {
         Console.WriteLine("REQUEST RECEIVED");
-        
+        generation_date = DateTime.Now;
+
         // Get service binding information, i.e. the stuff we need
         // in order to connect to Kafka
         Dictionary<string, string> bindingsKVP = GetDotnetServiceBindings();
