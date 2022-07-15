@@ -56,6 +56,7 @@ public class GeneratorController : ControllerBase
 
                 VaccinationEvent ve = new VaccinationEvent
                 {
+                    Id = Guid.NewGuid(),
                     RecipientID = recipientID.ToString(),
                     ShotNumber = shotNumber,
                     VaccinationType = vTypes.GetValue(vaccinationTypeID).ToString(),
