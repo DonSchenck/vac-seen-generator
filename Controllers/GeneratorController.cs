@@ -5,6 +5,7 @@ using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using KubeServiceBinding;
+using System.Globalization;
 
 namespace vac_seen_generator.Controllers;
 
@@ -28,10 +29,12 @@ public class GeneratorController : ControllerBase
 
     [HttpPost]
     //    public async Task<ActionResult<int>> PostTodoItem(DateOnly generation_date)
-    public async Task<ActionResult<int>> GenerateVaccinationEvents([FromForm]DateTime generation_date)
+    public async Task<ActionResult<int>> GenerateVaccinationEvents([FromForm]string generation_date)
     {
         Console.WriteLine("REQUEST RECEIVED");
-        generation_date = DateTime.Now;
+        DateTime eventDate = DateTime.ParseExact(generation_date, 
+                                  "yyyyMMdd", 
+                                   CultureInfo.InvariantCulture);
 
         // Get service binding information, i.e. the stuff we need
         // in order to connect to Kafka
@@ -61,7 +64,7 @@ public class GeneratorController : ControllerBase
                     RecipientID = recipientID.ToString(),
                     ShotNumber = shotNumber,
                     VaccinationType = vTypes.GetValue(vaccinationTypeID).ToString(),
-                    EventTimestamp = generation_date,
+                    EventTimestamp = eventDate,
                     CountryCode = CountryCode,
                 };
 
