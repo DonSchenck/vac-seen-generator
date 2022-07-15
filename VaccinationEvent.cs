@@ -4,6 +4,7 @@ namespace vac_seen_generator
 {
     class VaccinationEvent
     {
+        public Guid? Id;
         public String? RecipientID;
         public DateTime EventTimestamp;
         public string? CountryCode;
