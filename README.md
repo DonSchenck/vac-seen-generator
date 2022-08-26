@@ -2,26 +2,29 @@
 
 This source code, and [the associated tutorial](https://red.ht/csvax), are part of a ficticious demonstration that includes C# source code and [Red Hat OpenShift Streams for Apache Kafka](https://www.redhat.com/en/technologies/cloud-computing/openshift/openshift-streams-for-apache-kafka).
 
-This tutorial is structured so that a .NET developer can perform this workshop using free resources: the aformentioned Kafka cluster and [Developer Sandbox for Red Hat OpenShift](https://developers.redhat.com/developer-sandbox). In addition, a few open source prerequesites are required.
+This tutorial is structured so that a .NET developer can perform this workshop using free resources: the aformentioned Kafka cluster and [Openshift sandbox](https://developers.redhat.com/developer-sandbox). In addition, a few open source prerequesites are required.
 
 The scenario is this: Field personnel report the administration of COVID-19 vaccinations. These vaccination events are sent to a Kafka cluster.
 
-The particular repo references a microservice called "vac-seen-generator". It creates simulated vaccination events, which contain the following data:  
-* RecipientID string that identifies who got the shot. It's a GUID.
-* EventTimestamp date and time
-* CountryCode the hard-coded, two-character ISO code for the country. Currently "us".
-* VaccinationType string that denotes which vaccination, for example, Pfizer or Moderna.
-* ShotNumber an integer indicating which shot this is for this recipient, i.e. first, second, third, etc.
+This particular repo references a microservice called "vac-seen-generator". It creates simulated vaccination events, which contain the following data:  
+* RecipientID — string that identifies who got the shot. It's a GUID.
+* EventTimestamp — date and time
+* CountryCode — the hard-coded, two-character ISO code for the country. Currently "us".
+* VaccinationType — string that denotes which vaccination, for example, Pfizer or Moderna.
+* ShotNumber — an integer indicating which shot this is for this recipient, i.e. first, second, third, etc.
 
 ## Using this microservice  
-This microservice is started by an OpenShift job. It can be started multiple times; it uses the current date and time as the EventTimestamp property. Running it over and over simply adds more events to the Kafka event stream.
+This microservice has an API endpoint to which you can post a date. For that date, a random number of random events (from 1 to 40) are added to the Kafka event stream. This API can be called multiple times; it uses the current date and time as the EventTimestamp property. Calling it over and over simply adds more events to the Kafka event stream.
+
+This microservices depends on a Kafka instance and OpenShift Service Binding. Without those two dependencies, this program will do nothing.
 
 
 ## Overview of implementation  
 The user:
-1. Creates the app in their cluster using the "from Git" option.
-1. Binds their managed Kafka cluster to the app.
-1. Enjoys the magic.
+1. Creates this vac-seen-generator app in their cluster using the "from Git" option.  
+1. Makes available a managed Kafka instance.
+1. Binds their managed Kafka cluster to the app using Service Binding.
+1. Can now use this program.
 
 ## The result
 The result of this tutorial is a Kafka topic loaded with vaccination events. A follow-on tutorial will, in turn, use that data.  
