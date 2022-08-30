@@ -13,6 +13,10 @@ This particular repo references a microservice called "vac-seen-generator". It c
 * VaccinationType — string that denotes which vaccination, for example, Pfizer or Moderna.
 * ShotNumber — an integer indicating which shot this is for this recipient, i.e. first, second, third, etc.
 
+## Need help?
+If you need help or get stuck, email devsandbox@redhat.com.
+If you find a defect, [create an Issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue) in this repository.
+
 ## Using this microservice  
 This microservice has an API endpoint to which you can post a date. For that date, a random number of random events (from 1 to 40) are added to the Kafka event stream. This API can be called multiple times; it uses the current date and time as the EventTimestamp property. Calling it over and over simply adds more events to the Kafka event stream.
 
